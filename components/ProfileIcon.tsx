@@ -3,19 +3,17 @@ import { Avatar, Menu } from '@mantine/core';
 import { Logout } from 'tabler-icons-react';
 
 import { useSession, signOut } from 'next-auth/react';
-
-import whiteList from '../whitelist';
+import useUser from '../hooks/useUser';
 
 function ProfileIcon(): JSX.Element {
   const { data: session } = useSession();
+  const user = useUser();
 
   if (!session) {
     return <div />;
   }
 
-  const user = whiteList[session.user?.email || 'default'];
-  const alias = user?.alias ?? '未知';
-  const avatar = <Avatar alt={alias}>{alias}</Avatar>;
+  const avatar = <Avatar alt={user.alias} color="blue">{user.alias}</Avatar>;
 
   return (
     <Menu>
