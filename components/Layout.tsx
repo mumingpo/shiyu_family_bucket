@@ -9,8 +9,6 @@ type ComponentProps = {
 
 function Layout(props: ComponentProps): JSX.Element {
   const { children } = props;
-  const [navbarOpened, setNavbarOpened] = React.useState(false);
-  const [burger, setBurger] = React.useState<HTMLButtonElement | null>(null);
 
   return (
     <AppShell
