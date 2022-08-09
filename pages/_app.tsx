@@ -2,8 +2,10 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 
+import { SessionProvider } from 'next-auth/react';
+
 function App(props: AppProps) {
-  const { Component, pageProps } = props;
+  const { Component, pageProps: { session, ...pageProps } } = props;
 
   return (
     <>
@@ -16,7 +18,9 @@ function App(props: AppProps) {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Component {...pageProps} />
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </MantineProvider>
     </>
   );
