@@ -1,9 +1,20 @@
 import type { EmailUserConfig } from 'next-auth/providers/email';
 import type { RedisConfigNodejs } from '@upstash/redis';
 
+type OssConfig = {
+  ossBucket: string,
+  ossEndpoint: string,
+  ossAdminRoleArn: string,
+  ossUserRoleArn: string,
+  stsEndpoint: string,
+  stsManagerId: string,
+  stsManagerSecret: string,
+};
+
 type Configs = {
   emailConfig: EmailUserConfig,
   redisConfig: RedisConfigNodejs,
+  storageConfig: OssConfig,
 };
 
 const configs: Configs = {
@@ -24,6 +35,15 @@ const configs: Configs = {
     url: process.env.REDIS_URL || '',
     token: process.env.REDIS_TOKEN || '',
   },
-} as const;
+  storageConfig: {
+    ossBucket: process.env.OSS_BUCKET || '',
+    ossEndpoint: process.env.OSS_ENDPOINT || '',
+    ossAdminRoleArn: process.env.OSS_ADMIN_ROLE_ARN || '',
+    ossUserRoleArn: process.env.OSS_USER_ROLE_ARN || '',
+    stsEndpoint: process.env.STS_ENDPOINT || '',
+    stsManagerId: process.env.STS_MANAGER_ID || '',
+    stsManagerSecret: process.env.STS_MANAGER_SECRET || '',
+  },
+};
 
 export default configs;

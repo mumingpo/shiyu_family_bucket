@@ -5,33 +5,81 @@ import {
   ActionIcon,
   Group,
 } from '@mantine/core';
+import { closeAllModals, openConfirmModal } from '@mantine/modals';
+import { showNotification } from '@mantine/notifications';
 
-import { Trash, Download } from 'tabler-icons-react';
-
-import useSWR from 'swr';
+import { Trash, Download, CircleCheck, CircleX } from 'tabler-icons-react';
 
 import fileSize from 'filesize';
 
 import clientApi from '../clientApi';
 import useUser from '../hooks/useUser';
+import useFileList from '../hooks/useFileList';
 
 function FileTable(): JSX.Element {
-  const { data } = useSWR('/fileList', clientApi.listBucket);
-  const user = useUser();
+  const { user, auth } = useUser();
+  const { data: fileList } = useFileList();
   
-  if (!data) {
+  if (!fileList) {
     return <Text>没有数据可以显示。</Text>;
   }
 
-  const rows = data.map((dataPoint) => (
-    <tr key={dataPoint.key}>
-      <td>{dataPoint.key}</td>
-      <td>{fileSize(dataPoint.size)}</td>
-      <td>{dataPoint.lastModified.toLocaleString()}</td>
+  const rows = fileList.map((fileDescriptor) => (
+    <tr key={fileDescriptor.key}>
+      <td>{fileDescriptor.key}</td>
+      <td>{fileSize(fileDescriptor.size)}</td>
+      <td>{fileDescriptor.lastModified.toLocaleString()}</td>
       <td>
         <Group>
-          {!(user.isLabMember) || <ActionIcon><Download /></ActionIcon>}
-          {!(user.isShiyu) || <ActionIcon><Trash /></ActionIcon>}
+          {!(user.isLabMember) || (
+            <ActionIcon
+              component="a"
+              href={clientApi.getObjectUrl(auth, fileDescriptor.key)}
+              download={`${fileDescriptor.key}.zip`}
+            >
+              <Download />
+            </ActionIcon>
+          )}
+          {!(user.isShiyu) || (
+            <ActionIcon
+              onClick={() => {
+                openConfirmModal({
+                  title: '删除文件',
+                  children: <Text>真的要删除这个文件么？</Text>,
+                  labels: { confirm: '删除', cancel: '取消' },
+                  confirmProps: { color: 'red' },
+                  onCancel: closeAllModals,
+                  onConfirm: () => {
+                    closeAllModals();
+                    clientApi.deleteObject(auth, fileDescriptor.key)
+                      .then(() => {
+                        showNotification({
+                          title: '文件已删除',
+                          message: '世羽羽要记得补回来哦~',
+                          icon: <CircleCheck />,
+                        });
+                      })
+                      .catch((error) => {
+                        let errorString = error
+                          ? `错误名：“${error.name}”, 错误信息：“${error.message}”。`
+                          : '发生了未知错误。';
+                        if (error?.name === 'AccessDeniedError') {
+                          errorString = '你不是世羽！（敲）';
+                        }
+                        showNotification({
+                          title: '文件删除失败！',
+                          message: errorString,
+                          color: 'red',
+                          icon: <CircleX />,
+                        });
+                      });
+                  },
+                });
+              }}
+            >
+              <Trash />
+            </ActionIcon>
+          )}
         </Group>
       </td>
     </tr>

@@ -10,22 +10,41 @@ import {
   Text,
   LoadingOverlay,
 } from '@mantine/core';
+import { openModal } from '@mantine/modals';
 
 import { Refresh, Upload } from 'tabler-icons-react';
-import useSWR from 'swr';
 
 import Layout from '../components/Layout';
 import FileTable from '../components/FileTable';
+import FileUploadForm from '../components/FileUploadForm';
 
 import useUser from '../hooks/useUser';
+import useFileList from '../hooks/useFileList';
 import useHeightToBottomOfViewport from '../hooks/useHeightToBottomOfViewport';
-
-import clientApi from '../clientApi';
 
 const Home: NextPage = () => {
   const { height, ref } = useHeightToBottomOfViewport();
-  const user = useUser();
-  const { error, isValidating, mutate } = useSWR('/fileList', clientApi.listBucket);
+  const { user } = useUser();
+  const { isValidating, error, mutate } = useFileList();
+
+  const refreshButton = (
+    <Button
+      leftIcon={<Refresh />}
+      onClick={() => { mutate(); }}
+    >
+      更新列表
+    </Button>
+  );
+
+  const uploadButton = (
+    <Button
+      leftIcon={<Upload />}
+      color="green"
+      onClick={() => openModal({ title: '上传文件', children: <FileUploadForm /> })}
+    >
+      上传
+    </Button>
+  );
 
   return (
     <Layout>
@@ -43,11 +62,11 @@ const Home: NextPage = () => {
         <Group position="apart">
           <Title order={2}>我想要一份世羽！</Title>
           <Group>
-            { !(user.isLabMember) || <Button leftIcon={<Refresh />}>更新列表</Button> }
-            { !(user.isShiyu) || <Button leftIcon={<Upload />} color="green">上传</Button> }
+            { !(user.isLabMember) || refreshButton }
+            { !(user.isShiyu) || uploadButton }
           </Group>
         </Group>
-        { !(error) || <Text color="red" m="xl">{error}</Text>}
+        { !(error) || <Text color="red" m="xl">{`${error}`}</Text>}
         <ScrollArea p="xl" style={{ height: '100%', flex: '1 1 0' }}>
           <FileTable />
         </ScrollArea>

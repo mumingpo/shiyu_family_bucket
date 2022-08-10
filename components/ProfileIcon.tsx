@@ -7,7 +7,7 @@ import useUser from '../hooks/useUser';
 
 function ProfileIcon(): JSX.Element {
   const { data: session } = useSession();
-  const user = useUser();
+  const { user } = useUser();
 
   if (!session) {
     return <div />;
