@@ -3,7 +3,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
-import type { ColorScheme } from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
 import { NotificationsProvider } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 
@@ -13,10 +13,7 @@ import UserContextProvider from '../components/UserContextProvider';
 function App(props: AppProps): JSX.Element {
   const { Component, pageProps: { session, ...pageProps } } = props;
 
-  const [colorScheme, setColorScheme] = React.useState<ColorScheme>('light');
-  const toggleColorScheme = (value?: ColorScheme) => {
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
-  };
+  const [colorScheme, toggleColorScheme] = useToggle(['light', 'dark'] as const);
 
   return (
     <>
@@ -34,6 +31,7 @@ function App(props: AppProps): JSX.Element {
             <MantineProvider
               withGlobalStyles
               withNormalizeCSS
+              theme={{ colorScheme }}
             >
               <NotificationsProvider>
                 <ModalsProvider>

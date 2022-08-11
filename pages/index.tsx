@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { openModal } from '@mantine/modals';
 
-import { Refresh, Upload } from 'tabler-icons-react';
+import { Refresh, Search, Upload } from 'tabler-icons-react';
 
 import Layout from '../components/Layout';
 import FileTable from '../components/FileTable';
@@ -60,7 +60,9 @@ const Home: NextPage = () => {
           height,
           margin: 'auto',
           maxWidth: 1200,
-          backgroundColor: theme.white,
+          backgroundColor: theme.colorScheme === 'light'
+            ? theme.white
+            : theme.colors.dark[7],
         })}
         p='xl'
         ref={ref}
@@ -74,12 +76,14 @@ const Home: NextPage = () => {
         </Group>
         { renderIf(<Text color="red" m="xl">{`${error}`}</Text>, !!error) }
         <TextInput
-          label="搜索"
+          aria-label="搜索"
           placeholder="按文件名来搜索"
+          icon={<Search />}
           value={query}
           onChange={(event) => { setQuery(event.currentTarget.value); }}
           width="100%"
           mx="xl"
+          mt="xl"
         />
         <ScrollArea p="xl" style={{ height: '100%', flex: '1 1 0' }}>
           <FileTable query={query} />
