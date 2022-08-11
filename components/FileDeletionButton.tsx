@@ -31,8 +31,8 @@ function FileDeletionButton(props: ComponentProps): JSX.Element {
       onClick={() => {
         openConfirmModal({
           title: '删除文件',
-          children: <Text>真的要删除这个文件么？（才怪！根本删除不掉！为什么同样在js sdk里面list/get/put都可以就delete不行！）</Text>,
-          labels: { confirm: '删除（会发送删除请求但收不到回应）', cancel: '取消' },
+          children: <Text>真的要删除这个文件么？</Text>,
+          labels: { confirm: '删除', cancel: '取消' },
           confirmProps: { color: 'red' },
           onCancel: closeAllModals,
           onConfirm: () => {

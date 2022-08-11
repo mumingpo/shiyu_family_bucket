@@ -18,6 +18,7 @@ function useFileList() {
     {
       // 5 minutes
       refreshInterval: 5 * 60 * 1000,
+      dedupingInterval: 5 * 60 * 1000,
     },
   );
 }
