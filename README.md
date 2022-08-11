@@ -9,7 +9,7 @@
 这个项目由三个部分组成:
 - 前端：通过[Mantine](https://mantine.dev/) + [Next.js](https://nextjs.org/)开发并deploy的react网站。
 - 后端：通过[Vercel serverless functions](https://vercel.com/docs/concepts/functions#serverless-functions)用[next-auth](https://next-auth.js.org/)处理身份验证和[STS身份](https://www.alibabacloud.com/help/zh/resource-access-management/latest/what-is-sts)颁发的请求。
-- 云存储：用STS身份通过[阿里云OSS]进行文件I/O操作。
+- 云存储：用STS身份通过[阿里云OSS](https://www.alibabacloud.com/zh/product/object-storage-service)进行文件I/O操作。
 
 此外，这个项目还用了三个额外的服务：
 - AWS Route 53: 域名注册与DNS解析。
@@ -108,7 +108,7 @@ deploy后上Vercel就能看到Production在用什么域名。可以在Vercel上�
 2. 根据提示在自己的域名提供商出加上CNAME和A的DNS记录。
 3. 在`.env.production.local`里面加上相应的`NEXTAUTH_URL`（[说明文档](https://next-auth.js.org/configuration/options#nextauth_url)）。
 
-#### 发布！
+### 发布！
 
 `bash deploy.sh`
 
