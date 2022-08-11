@@ -5,13 +5,13 @@ import useUser from './useUser';
 import clientApi from '../clientApi';
 
 function useFileList() {
-  const { user, auth } = useUser();
+  const { user, ossClient } = useUser();
 
   return useSWR(
     '/fileList',
     async () => {
-      if (user.isLabMember) {
-        return clientApi.listBucket(auth);
+      if (user.isLabMember && ossClient) {
+        return clientApi.listBucket(ossClient);
       }
       return clientApi.getSampleBucketList();
     },

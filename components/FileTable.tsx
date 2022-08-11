@@ -17,7 +17,7 @@ import useUser from '../hooks/useUser';
 import useFileList from '../hooks/useFileList';
 
 function FileTable(): JSX.Element {
-  const { user, auth } = useUser();
+  const { user, ossClient } = useUser();
   const { data: fileList } = useFileList();
   
   if (!fileList) {
@@ -34,7 +34,7 @@ function FileTable(): JSX.Element {
           {!(user.isLabMember) || (
             <ActionIcon
               component="a"
-              href={clientApi.getObjectUrl(auth, fileDescriptor.key)}
+              href={ossClient ? clientApi.getObjectUrl(ossClient, fileDescriptor.key) : '#'}
               download={`${fileDescriptor.key}.zip`}
             >
               <Download />
@@ -45,13 +45,23 @@ function FileTable(): JSX.Element {
               onClick={() => {
                 openConfirmModal({
                   title: '删除文件',
-                  children: <Text>真的要删除这个文件么？</Text>,
-                  labels: { confirm: '删除', cancel: '取消' },
+                  children: <Text>真的要删除这个文件么？（才怪！根本删除不掉！为什么同样在js sdk里面list/get/put都可以就delete不行！）</Text>,
+                  labels: { confirm: '删除（会发送删除请求但收不到回应）', cancel: '取消' },
                   confirmProps: { color: 'red' },
                   onCancel: closeAllModals,
                   onConfirm: () => {
                     closeAllModals();
-                    clientApi.deleteObject(auth, fileDescriptor.key)
+                    if (!ossClient) {
+                      showNotification({
+                        title: '文件删除失败！',
+                        message: 'ossClient未初始化。',
+                        color: 'red',
+                        icon: <CircleX />,
+                      });
+                      return;
+                    }
+                    clientApi.deleteObject(ossClient, fileDescriptor.key)
+                    // fetch(clientApi.getObjectUrl(ossClient, fileDescriptor.key), { method: 'DELETE' })
                       .then(() => {
                         showNotification({
                           title: '文件已删除',

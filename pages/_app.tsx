@@ -8,6 +8,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 
 import { SessionProvider } from 'next-auth/react';
+import UserContextProvider from '../components/UserContextProvider';
 
 function App(props: AppProps): JSX.Element {
   const { Component, pageProps: { session, ...pageProps } } = props;
@@ -24,10 +25,13 @@ function App(props: AppProps): JSX.Element {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-
       <SessionProvider session={session}>
-        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-          <MantineProvider
+        <UserContextProvider>
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          >
+            <MantineProvider
               withGlobalStyles
               withNormalizeCSS
             >
@@ -37,7 +41,8 @@ function App(props: AppProps): JSX.Element {
                 </ModalsProvider>
               </NotificationsProvider>
             </MantineProvider>
-        </ColorSchemeProvider>
+          </ColorSchemeProvider>
+        </UserContextProvider>
       </SessionProvider>
     </>
   );

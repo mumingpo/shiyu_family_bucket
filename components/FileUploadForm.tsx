@@ -29,7 +29,7 @@ function FileUploadForm(): JSX.Element {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const { auth } = useUser();
+  const { ossClient } = useUser();
 
   const initialValues: FormValues = {
     objKey: '',
@@ -68,7 +68,13 @@ function FileUploadForm(): JSX.Element {
       return;
     }
 
-    clientApi.putObject(auth, objKey, file)
+    if (!ossClient) {
+      setLoading(false);
+      setError('ossClient未初始化！');
+      return;
+    }
+
+    clientApi.putObject(ossClient, objKey, file)
       .then(() => {
         setLoading(false);
         closeAllModals();

@@ -24,15 +24,18 @@ import useHeightToBottomOfViewport from '../hooks/useHeightToBottomOfViewport';
 
 const Home: NextPage = () => {
   const { height, ref } = useHeightToBottomOfViewport();
-  const { user } = useUser();
-  const { isValidating, error, mutate } = useFileList();
+  const { user, mutateAuth } = useUser();
+  const { isValidating, error, mutate: mutateFileList } = useFileList();
 
   const refreshButton = (
     <Button
       leftIcon={<Refresh />}
-      onClick={() => { mutate(); }}
+      onClick={async () => {
+        await mutateAuth();
+        mutateFileList();
+      }}
     >
-      更新列表
+      更新列表与身份信息
     </Button>
   );
 
