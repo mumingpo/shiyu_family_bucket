@@ -8,6 +8,7 @@ import {
   Button,
   Title,
   Text,
+  TextInput,
   LoadingOverlay,
 } from '@mantine/core';
 import { openModal } from '@mantine/modals';
@@ -26,6 +27,7 @@ const Home: NextPage = () => {
   const { height, ref } = useHeightToBottomOfViewport();
   const { user, mutateAuth } = useUser();
   const { isValidating, error, mutate: mutateFileList } = useFileList();
+  const [query, setQuery] = React.useState('');
 
   const refreshButton = (
     <Button
@@ -70,8 +72,16 @@ const Home: NextPage = () => {
           </Group>
         </Group>
         { !(error) || <Text color="red" m="xl">{`${error}`}</Text>}
+        <TextInput
+          label="搜索"
+          placeholder="按文件名来搜索"
+          value={query}
+          onChange={(event) => { setQuery(event.currentTarget.value); }}
+          width="100%"
+          mx="xl"
+        />
         <ScrollArea p="xl" style={{ height: '100%', flex: '1 1 0' }}>
-          <FileTable />
+          <FileTable query={query} />
         </ScrollArea>
       </Stack>
     </Layout>

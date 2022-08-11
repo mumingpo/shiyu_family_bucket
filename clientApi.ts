@@ -36,7 +36,7 @@ const clientApi: ClientApi = {
   getObjectUrl: (client, objKey) => {
     const url = client.signatureUrl(objKey, {
       response: {
-        "content-disposition": `attachment; filename=${encodeURIComponent(objKey)}.zip`
+        "content-disposition": `attachment; filename=${encodeURIComponent(objKey)}.zip`,
       },
     });
     
