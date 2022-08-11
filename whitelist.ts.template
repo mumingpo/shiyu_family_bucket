@@ -1,0 +1,55 @@
+interface User {
+  alias: string,
+  isLabMember: boolean,
+  isShiyu: boolean,
+}
+
+interface Shiyu extends User {
+  alias: string,
+  isLabMember: true,
+  isShiyu: true,
+}
+
+interface LabMember extends User {
+  alias: string,
+  isLabMember: true,
+  isShiyu: false,
+}
+
+interface UnknownMember extends User {
+  alias: '未知',
+  isLabMember: false,
+  isShiyu: false,
+}
+
+type Member = Shiyu | LabMember | UnknownMember;
+
+// ---------------------------------------------
+
+const admin: Shiyu = {
+  alias: '世羽',
+  isLabMember: true,
+  isShiyu: true,
+};
+
+const groupMember: LabMember = {
+  alias: '群员',
+  isLabMember: true,
+  isShiyu: false,
+};
+
+const unk: UnknownMember = {
+  alias: '未知',
+  isLabMember: false,
+  isShiyu: false,
+};
+
+const whiteList = {
+  '世羽邮箱1@gmail.com': admin,
+  '世羽邮箱2@qq.com': admin,
+  'sakura邮箱1@qq.com': groupMember,
+  'default': unk, // 不要动!
+} as const;
+
+export default whiteList;
+export type { Member };
