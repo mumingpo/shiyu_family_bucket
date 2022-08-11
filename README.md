@@ -38,7 +38,7 @@ yarn install
 
 #### 设置信任用户
 
-从`.env.local.template`创建`.env.local`，并且记录云架构/配置部分所需的环境变量。如需引用其他的环境变量，请在configs.ts里面加进去并且集中管理。
+从`.env.local.template`创建`.env.local`，并且记录云架构/配置部分所需的环境变量。如需引用其他的环境变量，请在`configs.ts`里面加进去并且集中管理。
 
 注：默认环境变量在前端是看不到的。如需前端能看到的环境变量，请把变量名加上`NEXT_PUBLIC_`的前缀([Next.js 文档](https://nextjs.org/docs/basic-features/environment-variables))。
 
@@ -80,7 +80,7 @@ yarn install
 
 在`.env.local`里面设置邮件发送服务器。任何[已知可用nodemailer](http://nodemailer.com/smtp/well-known/)的SMTP服务都不会有问题。
 
-本项目默认使（bai）用（piao）(Sendgrid)[https://sendgrid.com/]。如想使用请参照其教程进行注册和设置。
+本项目默认使（bai）用（piao）[Sendgrid](https://sendgrid.com/)。如想使用请参照其教程进行注册和设置。
 
 #### OAuth提供商设置（可选）
 
