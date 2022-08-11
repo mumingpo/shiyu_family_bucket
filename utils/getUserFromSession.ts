@@ -1,15 +1,19 @@
 import { Session } from 'next-auth';
 
-import whiteList from '../whitelist';
+import users from '../users';
 
 function getUserFromSession(session: Session | null) {
   const email = session?.user?.email;
 
-  if (!email || !(Object.hasOwn(whiteList, email))) {
-    return whiteList.default;
+  if (!email) {
+    return users.default;
   }
 
-  return whiteList[email as keyof typeof whiteList];
+  if (!Object.hasOwn(users, email)) {
+    return users.default;
+  }
+
+  return users[email as keyof typeof users];
 };
 
 export default getUserFromSession;

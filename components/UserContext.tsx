@@ -2,18 +2,17 @@ import * as React from 'react';
 import type { KeyedMutator } from 'swr';
 import OSS from 'ali-oss';
 
-import type { AuthInfo } from '../types';
-import whiteList from '../whitelist';
-import type { Member } from '../whitelist';
+import users from '../users';
+import type { AuthInfo, User } from '../types';
 
 type UserContextType = {
-  user: Member,
+  user: User,
   mutateAuth: KeyedMutator<AuthInfo>, 
   ossClient: OSS | null,
 }
 
 const UserContext = React.createContext<UserContextType>({
-  user: whiteList.default,
+  user: users.default,
   mutateAuth: async () => undefined,
   ossClient: null,
 });

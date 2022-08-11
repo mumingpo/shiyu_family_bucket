@@ -10,7 +10,7 @@ function useFileList() {
   return useSWR(
     '/fileList',
     async () => {
-      if (user.isLabMember && ossClient) {
+      if (user.type !== 'nonMember' && ossClient) {
         return clientApi.listBucket(ossClient);
       }
       return clientApi.getSampleBucketList();

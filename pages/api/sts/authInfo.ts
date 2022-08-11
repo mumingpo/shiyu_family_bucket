@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // no typescript annotation, so yeah, just follow docs
   // https://www.alibabacloud.com/help/zh/resource-access-management/latest/use-an-sts-token-for-authorizing-a-mobile-app-to-access-alibaba-cloud-resources?spm=a2c63.p38356.0.0.7e2060ccsMQDjf#concept-tdn-n2k-xdb
-  if (user.isShiyu) {
+  if (user.type === 'admin') {
     const response = await sts.assumeRole(
       configs.storageConfig.ossAdminRoleArn,
       `admin-${(new Date()).getTime()}`
@@ -39,7 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     ossAuth.accessKeyId = response.Credentials.AccessKeyId;
     ossAuth.accessKeySecret = response.Credentials.AccessKeySecret;
     ossAuth.stsToken = response.Credentials.SecurityToken;
-  } else if (user.isLabMember) {
+  } else if (user.type === 'member') {
     const response = await sts.assumeRole(
       configs.storageConfig.ossUserRoleArn,
       `user-${(new Date()).getTime()}`

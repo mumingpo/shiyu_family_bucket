@@ -22,6 +22,7 @@ import FileUploadForm from '../components/FileUploadForm';
 import useUser from '../hooks/useUser';
 import useFileList from '../hooks/useFileList';
 import useHeightToBottomOfViewport from '../hooks/useHeightToBottomOfViewport';
+import renderIf from '../utils/renderIf';
 
 const Home: NextPage = () => {
   const { height, ref } = useHeightToBottomOfViewport();
@@ -67,11 +68,11 @@ const Home: NextPage = () => {
         <Group position="apart">
           <Title order={2}>我想要一份世羽！</Title>
           <Group>
-            { !(user.isLabMember) || refreshButton }
-            { !(user.isShiyu) || uploadButton }
+            { renderIf(refreshButton, user.type !== 'nonMember') }
+            { renderIf(uploadButton, user.type === 'admin') }
           </Group>
         </Group>
-        { !(error) || <Text color="red" m="xl">{`${error}`}</Text>}
+        { renderIf(<Text color="red" m="xl">{`${error}`}</Text>, !!error) }
         <TextInput
           label="搜索"
           placeholder="按文件名来搜索"
